@@ -1,8 +1,9 @@
-<?php
+    <?php
 
 namespace App\Http\Controllers;
 
 use App\Models\Book;
+use Illuminate\Http\Request;
 
 class BookController extends Controller
 {
@@ -10,20 +11,64 @@ class BookController extends Controller
     {
         $books = Book::all();
 
-    $title = 'Daftar Buku';
-    $description = 'Berikut adalah koleksi buku yang tersedia.';
+        $title = 'Daftar Buku';
+        $description = 'Berikut adalah koleksi buku yang tersedia.';
 
-    return view('books.index', compact(
-        'books',
-        'title',
-        'description'
-    ));
+        return view('books.index', compact(
+            'books',
+            'title',
+            'description'
+        ));
     }
 
-    public function show($id)
-{
-    $book = Book::findOrFail($id);
+    public function create()
+    {
+        return view('books.create');
+    }
 
-    return view('books.show', compact('book'));
-}
+    public function store(Request $request)
+    {
+        $validated = $request->validate([
+            'title' => 'required|string|max:255',
+            'author' => 'required|string|max:255',
+            'year' => 'required|integer|min:1|max:9999',
+            'stock' => 'required|integer|min:0',
+        ]);
+
+        Book::create($validated);
+
+        return redirect()->route('books.index');
+    }
+
+    public function show(Book $book)
+    {
+        return view('books.show', compact('book'));
+    }
+
+    public function edit(Book $book)
+    {
+        return view('books.edit', compact('book'));
+    }
+
+    public function update(Request $request, Book $book)
+    {
+        $validated = $request->validate([
+            'title' => 'required|string|max:255',
+            'author' => 'required|string|max:255',
+            'year' => 'required|integer|between:1901,2155',
+            'stock' => 'required|integer|min:0',
+        ]);
+
+        $book->update($validated);
+
+        return redirect()->route('books.index');
+    }
+
+    // DELETE: Menghapus buku
+    public function destroy(Book $book)
+    {
+        $book->delete();
+
+        return redirect()->route('books.index');
+    }
 }

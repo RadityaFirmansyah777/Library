@@ -9,6 +9,7 @@
     <p>{{ $description }}</p>
 
     <h3>Koleksi Buku</h3>
+    <a href="{{ route('books.create') }}">+ Tambah Buku</a>
 
     <table border="1" cellpadding="8" cellspacing="0">
         <thead>
@@ -18,9 +19,10 @@
                 <th>Penulis</th>
                 <th>Tahun Terbit</th>
                 <th>Stok</th>
-                <th>Detail</th>
+                <th>Aksi</th>
             </tr>
         </thead>
+
         <tbody>
             @forelse ($books as $book)
                 <tr>
@@ -36,9 +38,20 @@
                         @endif
                     </td>
                     <td>
-                        <a href="{{ route('books.show', $book->id) }}">
-                            Lihat Detail
-                        </a>
+                        <a href="{{ route('books.show', $book->id) }}">Detail</a> |
+    <a href="{{ route('books.edit', $book->id) }}">Edit</a> |
+
+    <form action="{{ route('books.destroy', $book->id) }}"
+      method="POST"
+      style="display: inline;">
+    @csrf
+    @method('DELETE')
+
+    <button type="submit"
+            onclick="return confirm('Yakin ingin menghapus buku ini?')">
+        Hapus
+    </button>
+    </form>
                     </td>
                 </tr>
             @empty
