@@ -2,13 +2,14 @@
 namespace App\Http\Controllers;
 
 use App\Models\Book;
+use App\Models\Category;
 use Illuminate\Http\Request;
 
 class BookController extends Controller
 {
     public function index()
     {
-        $books = Book::all();
+        $books = Book::with('category')->get();
 
         $title = 'Daftar Buku';
         $description = 'Berikut adalah koleksi buku yang tersedia.';
@@ -22,17 +23,21 @@ class BookController extends Controller
 
     public function create()
     {
-        return view('books.create');
+        $categories = Category::orderBy('name')->get();
+
+        return view('books.create', compact('categories'));
     }
 
     public function store(Request $request)
     {
         $validated = $request->validate([
-    'title' => 'required|string|min:3|max:255',
-    'author' => 'required|string|min:3|max:255',
-    'year' => 'required|integer|between:1901,2155',
-    'stock' => 'required|integer|min:0|max:1000',
-    ]);
+            'title' => 'required|string|min:3|max:255',
+            'author' => 'required|string|min:3|max:255',
+            'year' => 'required|integer|between:1901,2155',
+            'stock' => 'required|integer|min:0|max:1000',
+            'category_id' => 'required|exists:categories,id',
+        ]);
+
         Book::create($validated);
 
         return redirect()->route('books.index');
@@ -45,16 +50,19 @@ class BookController extends Controller
 
     public function edit(Book $book)
     {
-        return view('books.edit', compact('book'));
+        $categories = Category::orderBy('name')->get();
+
+        return view('books.edit', compact('book', 'categories'));
     }
 
     public function update(Request $request, Book $book)
     {
         $validated = $request->validate([
-            'title' => 'required|string|max:255',
-            'author' => 'required|string|max:255',
+            'title' => 'required|string|min:3|max:255',
+            'author' => 'required|string|min:3|max:255',
             'year' => 'required|integer|between:1901,2155',
-            'stock' => 'required|integer|min:0',
+            'stock' => 'required|integer|min:0|max:1000',
+            'category_id' => 'required|exists:categories,id',
         ]);
 
         $book->update($validated);
@@ -62,7 +70,6 @@ class BookController extends Controller
         return redirect()->route('books.index');
     }
 
-    // DELETE: Menghapus buku
     public function destroy(Book $book)
     {
         $book->delete();

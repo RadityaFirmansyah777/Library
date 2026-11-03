@@ -1,3 +1,4 @@
+
 <?php
 
 namespace Database\Seeders;
@@ -43,7 +44,13 @@ class BookSeeder extends Seeder
         ];
 
         foreach ($books as $book) {
-            Book::create($book);
+            Book::updateOrCreate(
+                [
+                    'title' => $book['title'],
+                    'author' => $book['author'],
+                ],
+                $book
+            );
         }
     }
 }

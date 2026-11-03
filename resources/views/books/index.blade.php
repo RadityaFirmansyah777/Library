@@ -17,6 +17,7 @@
                 <th>ID</th>
                 <th>Judul Buku</th>
                 <th>Penulis</th>
+                <th>Kategori</th>
                 <th>Tahun Terbit</th>
                 <th>Stok</th>
                 <th>Aksi</th>
@@ -29,6 +30,9 @@
                     <td>{{ $book->id }}</td>
                     <td>{{ $book->title }}</td>
                     <td>{{ $book->author }}</td>
+                    <td>
+                        {{ $book->category?->name ?? 'Belum ada kategori' }}
+                    </td>
                     <td>{{ $book->year }}</td>
                     <td>
                         @if ($book->stock > 0)
@@ -39,24 +43,24 @@
                     </td>
                     <td>
                         <a href="{{ route('books.show', $book->id) }}">Detail</a> |
-    <a href="{{ route('books.edit', $book->id) }}">Edit</a> |
+                        <a href="{{ route('books.edit', $book->id) }}">Edit</a> |
 
-    <form action="{{ route('books.destroy', $book->id) }}"
-      method="POST"
-      style="display: inline;">
-    @csrf
-    @method('DELETE')
+                        <form action="{{ route('books.destroy', $book->id) }}"
+                              method="POST"
+                              style="display: inline;">
+                            @csrf
+                            @method('DELETE')
 
-    <button type="submit"
-            onclick="return confirm('Yakin ingin menghapus buku ini?')">
-        Hapus
-    </button>
-    </form>
+                            <button type="submit"
+                                    onclick="return confirm('Yakin ingin menghapus buku ini?')">
+                                Hapus
+                            </button>
+                        </form>
                     </td>
                 </tr>
             @empty
                 <tr>
-                    <td colspan="6">Belum ada data buku.</td>
+                    <td colspan="7">Belum ada data buku.</td>
                 </tr>
             @endforelse
         </tbody>
