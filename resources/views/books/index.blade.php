@@ -1,3 +1,4 @@
+
 @extends('layouts.app')
 
 @section('title', $title)
@@ -16,29 +17,35 @@
                 <th>Judul Buku</th>
                 <th>Penulis</th>
                 <th>Tahun Terbit</th>
+                <th>Stok</th>
                 <th>Detail</th>
             </tr>
         </thead>
         <tbody>
-            @foreach ($books as $id => $book)
+            @forelse ($books as $book)
                 <tr>
-                    <td>{{ $id }}</td>
-                    <td>{{ $book['title'] }}</td>
-                    <td>{{ $book['author'] }}</td>
-                    <td>{{ $book['year'] }}</td>
+                    <td>{{ $book->id }}</td>
+                    <td>{{ $book->title }}</td>
+                    <td>{{ $book->author }}</td>
+                    <td>{{ $book->year }}</td>
                     <td>
-                        <a href="/books/{{ $id }}">Lihat Detail</a>
+                        @if ($book->stock > 0)
+                            {{ $book->stock }}
+                        @else
+                            Habis
+                        @endif
+                    </td>
+                    <td>
+                        <a href="{{ route('books.show', $book->id) }}">
+                            Lihat Detail
+                        </a>
                     </td>
                 </tr>
-            @endforeach
+            @empty
+                <tr>
+                    <td colspan="6">Belum ada data buku.</td>
+                </tr>
+            @endforelse
         </tbody>
     </table>
-
-    <h3>Informasi Stok</h3>
-
-    @if ($stock > 0)
-        <p>Buku tersedia. Jumlah stok: {{ $stock }}</p>
-    @else
-        <p>Buku sedang habis.</p>
-    @endif
 @endsection

@@ -1,4 +1,3 @@
-
 @extends('layouts.app')
 
 @section('title', 'Detail Buku')
@@ -6,10 +5,30 @@
 @section('content')
     <h2>Detail Buku</h2>
 
-    <p>ID: {{ $bookId }}</p>
-    <p>Judul Buku: {{ $book['title'] }}</p>
-    <p>Penulis: {{ $book['author'] }}</p>
-    <p>Tahun Terbit: {{ $book['year'] }}</p>
+    <table border="1" cellpadding="8" cellspacing="0">
+        <tr>
+            <th>ID</th>
+            <td>{{ $book->id }}</td>
+        </tr>
+        <tr>
+            <th>Judul Buku</th>
+            <td>{{ $book->title }}</td>
+        </tr>
+        <tr>
+            <th>Penulis</th>
+            <td>{{ $book->author }}</td>
+        </tr>
+        <tr>
+            <th>Tahun Terbit</th>
+            <td>{{ $book->year }}</td>
+        </tr>
+        <tr>
+            <th>Stok</th>
+            <td>{{ $book->stock }}</td>
+        </tr>
+    </table>
 
-    <a href="/books">Kembali ke Daftar Buku</a>
+    <br>
+
+    <a href="{{ route('books.index') }}">Kembali ke Daftar Buku</a>
 @endsection
