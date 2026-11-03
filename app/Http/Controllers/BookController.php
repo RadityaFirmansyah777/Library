@@ -1,5 +1,4 @@
-    <?php
-
+<?php
 namespace App\Http\Controllers;
 
 use App\Models\Book;
@@ -29,12 +28,11 @@ class BookController extends Controller
     public function store(Request $request)
     {
         $validated = $request->validate([
-            'title' => 'required|string|max:255',
-            'author' => 'required|string|max:255',
-            'year' => 'required|integer|min:1|max:9999',
-            'stock' => 'required|integer|min:0',
-        ]);
-
+    'title' => 'required|string|min:3|max:255',
+    'author' => 'required|string|min:3|max:255',
+    'year' => 'required|integer|between:1901,2155',
+    'stock' => 'required|integer|min:0|max:1000',
+    ]);
         Book::create($validated);
 
         return redirect()->route('books.index');
