@@ -66,3 +66,10 @@
         </tbody>
     </table>
 @endsection
+<form action="{{ route('logout') }}" method="POST"
+      onsubmit="return confirm('Yakin ingin logout?')">
+    @csrf
+
+    <button type="submit">Logout</button>
+</form>
+
